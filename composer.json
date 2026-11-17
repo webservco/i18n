@@ -27,7 +27,7 @@
         "webservco"
     ],
     "license" : "MIT",
-    "name" : "webservco/component-skeleton",
+    "name" : "webservco/i18n",
     "require": {
         "php" : "^8.4"
     },

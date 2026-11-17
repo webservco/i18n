@@ -1,4 +1,4 @@
-name: component-skeleton
+name: i18n
 type: php
 docroot: public
 #php_version: "8.3"

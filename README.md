@@ -12,7 +12,7 @@ Keep the first description line (the general sentence and the sandbox link) as i
 Leave the version out of the install command. Composer picks the current major, while a hardcoded constraint goes stale.
 -->
 
-# webservco/component-skeleton
+# webservco/i18n
 
 > **Note:** This is a template for creating new components. Delete this note when implementing, and the hidden comment at the start of the file.
 
@@ -30,7 +30,7 @@ _What it does, in one sentence._
 ## Installation
 
 ```shell
-composer require webservco/component-skeleton
+composer require webservco/i18n
 ```
 
 ---
