@@ -20,7 +20,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "description" : "A PHP component/library. Translates and formats texts in the language of a request: languages, ICU message catalogs, dates and numbers, the language of a request, localized views.",
+    "description" : "A PHP component/library. Translates and formats texts with ICU in the language of a request: languages, message catalogs and their checks, dates and numbers, the language switch, localized views.",
     "homepage" : "https://webserv.co",
     "keywords" : [
         "component",
