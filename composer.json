@@ -20,7 +20,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "description" : "A PHP component/library.",
+    "description" : "A PHP component/library. Translates and formats texts in the language of a request: languages, ICU message catalogs, dates and numbers, the language of a request, localized views.",
     "homepage" : "https://webserv.co",
     "keywords" : [
         "component",
@@ -29,7 +29,15 @@
     "license" : "MIT",
     "name" : "webservco/i18n",
     "require": {
-        "php" : "^8.4"
+        "php" : "^8.4",
+        "ext-intl": "*",
+        "psr/http-message": "^2",
+        "psr/http-server-handler": "^1",
+        "psr/http-server-middleware": "^1",
+        "psr/log": "^3",
+        "webservco/configuration": "^2",
+        "webservco/data": "^2",
+        "webservco/view": "^2"
     },
     "require-dev": {
         "pds/skeleton": "^1",
@@ -46,7 +54,9 @@
         "squizlabs/php_codesniffer" : "^4",
         "vimeo/psalm": "^6",
         "webservco/coding-standards": "^2",
-        "webservco/component-common": "^2"
+        "webservco/component-common": "^2",
+        "webservco/http": "^2",
+        "webservco/http-response-service": "^2"
     },
     "scripts": {
         "check:lint": "vendor/bin/parallel-lint bin config public resources src tests",
