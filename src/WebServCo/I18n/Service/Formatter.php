@@ -27,6 +27,12 @@ use const PHP_ROUND_HALF_UP;
 final class Formatter implements FormatterInterface
 {
     /**
+     * The time zone of the date formatters: they get local times. ICU has time zone data of its own, often older than
+     * PHP's: it refuses a zone it doesn't know, and shows another time where the rules of a zone have changed.
+     */
+    private const string LOCAL_TIME_ZONE = 'UTC';
+
+    /**
      * Date formatters: "date type:time type" => formatter.
      *
      * @var array<string,\IntlDateFormatter>
@@ -93,10 +99,10 @@ final class Formatter implements FormatterInterface
     private function formatDateTimeValue(DateTimeInterface $dateTime, int $dateType, int $timeType): string
     {
         $dateFormatter = $this->dateFormatters[sprintf('%d:%d', $dateType, $timeType)]
-            ??= new IntlDateFormatter($this->language->getLocale(), $dateType, $timeType, $this->timeZone);
+            ??= new IntlDateFormatter($this->language->getLocale(), $dateType, $timeType, self::LOCAL_TIME_ZONE);
 
-        // The formatter uses its own time zone: the value is converted.
-        $result = $dateFormatter->format($dateTime);
+        // The value is converted here, by PHP: its local time, formatted as UTC.
+        $result = $dateFormatter->format($dateTime->getTimestamp() + $this->timeZone->getOffset($dateTime));
         if ($result === false) {
             throw new UnexpectedValueException('Error formatting a date or time.');
         }

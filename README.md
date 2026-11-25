@@ -242,7 +242,7 @@ Namespaces are relative to `WebServCo\I18n\`. Without a contract: `View\Abstract
 | `number($number)` | `formatNumber()`: grouping | 1,234,568 | 1.234.568 |
 | `number($number, 2)` | fraction digits, always shown | 1,234,567.89 | 1.234.567,89 |
 
-- Every date and time is shown in the display time zone of the container, whatever the time zone of the value.
+- Every date and time is shown in the display time zone of the container, whatever the time zone of the value. The time zone data is PHP's, so every `DateTimeZone` works, also one that ICU's own data doesn't have.
 - Numbers are rounded half up (`2.5` is `3`), and a value rounded to zero has no minus sign.
 - The styles are fixed. The view methods escape their result; the formatter's is plain text.
 

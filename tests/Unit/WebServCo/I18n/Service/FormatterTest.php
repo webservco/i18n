@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 use Tests\Unit\Assets\TestLanguage;
 use WebServCo\I18n\Service\Formatter;
 
+use function timezone_identifiers_list;
+
 /**
  * Expected values are mostly German: its patterns are the same in every recent ICU version.
  */
@@ -36,6 +38,52 @@ final class FormatterTest extends TestCase
         $dateTime = new DateTimeImmutable('2026-11-06 00:30:00', new DateTimeZone('Europe/Budapest'));
 
         self::assertSame('05.11.2026, 23:30', $formatter->formatDateTime($dateTime));
+    }
+
+    /**
+     * Every zone PHP lists, in winter and in summer. ICU has time zone data of its own, often older than PHP's: it
+     * doesn't know the newest zones, and it knows others by rules that have changed.
+     */
+    public function testTheTimeZoneDataIsPhps(): void
+    {
+        $dateTimes = [
+            new DateTimeImmutable('2026-01-15 12:34:00', new DateTimeZone('UTC')),
+            new DateTimeImmutable('2026-07-15 12:34:00', new DateTimeZone('UTC')),
+        ];
+        $expected = [];
+        $actual = [];
+
+        foreach (timezone_identifiers_list() as $name) {
+            if ($name === '') {
+                self::fail('A time zone without a name.');
+            }
+
+            $timeZone = new DateTimeZone($name);
+            $formatter = new Formatter(TestLanguage::German, $timeZone);
+
+            foreach ($dateTimes as $dateTime) {
+                $expected[$name][] = $dateTime->setTimezone($timeZone)->format('d.m.Y, H:i');
+                $actual[$name][] = $formatter->formatDateTime($dateTime);
+            }
+        }
+
+        self::assertSame($expected, $actual);
+    }
+
+    public function testATimeZoneCanBeAnOffset(): void
+    {
+        $formatter = $this->createFormatter(TestLanguage::German, '-03:30');
+        $dateTime = new DateTimeImmutable('2026-11-05 01:00:00', new DateTimeZone('UTC'));
+
+        self::assertSame('04.11.2026, 21:30', $formatter->formatDateTime($dateTime));
+    }
+
+    public function testATimeBeforeTheUnixEpoch(): void
+    {
+        $formatter = $this->createFormatter(TestLanguage::German, 'Europe/Budapest');
+        $dateTime = new DateTimeImmutable('1965-03-01 23:30:00', new DateTimeZone('UTC'));
+
+        self::assertSame('02.03.1965, 00:30', $formatter->formatDateTime($dateTime));
     }
 
     public function testDatesFollowTheLanguage(): void
